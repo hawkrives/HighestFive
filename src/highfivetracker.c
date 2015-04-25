@@ -13,8 +13,7 @@ static Window *s_main_window;
 double highestFive=0;
 double hx;
 double hy;
-static TextLayer *s_output_layer;
-
+double hz;
 /*static void data_handler(AccelData *data, uint32_t num_samples) {
  AccelData accel = (AccelData) { .x = 0, .y = 0, .z = 0 };
  accel_service_peek(&accel);
@@ -31,18 +30,33 @@ static TextLayer *s_output_layer;
 }
 */
 static char acc_buffer[128];
+static int max(int x, int y , int z){
+  if (x<y){
+    if (z<y){
+      return y;
+    } else if (z>y)
+        return z;
+  }
+  if (y<x){
+    if (z<x){
+      return x;
+    } else if (x<z)
+      return z;
+  }
+  return z;
+}
+static TextLayer *s_acc_layer;
 static void data_handler(AccelData *data, uint32_t num_samples) {
-
-  // Compose string of all data for 3 samples
-  snprintf(acc_buffer, sizeof(acc_buffer), 
-    "N X,Y,Z\n0 %d,%d,%d\n1 %d,%d,%d\n2 %d,%d,%d", 
-    data[0].x, data[0].y, data[0].z, 
-    data[1].x, data[1].y, data[1].z, 
-    data[2].x, data[2].y, data[2].z
-  );
-
-  //Show the data
-  //text_layer_set_text(s_output_layer, s_buffer);
+  int mx,my,mz;
+  mx=max(data[0].x,data[1].x,data[2].x);
+  my=max(data[0].y,data[1].y,data[2].y);
+  mz=max(data[0].z,data[1].z,data[2].z);
+  int temp=max(mx,my,mz);
+  if (temp>highestFive)
+    highestFive=temp;
+  static char acc_text[18];
+  snprintf(acc_text, sizeof(acc_text), "%d", (int)highestFive);
+  text_layer_set_text(s_acc_layer, acc_text);;
 }
 
 static ActionBarLayer *s_action_bar;
@@ -104,11 +118,11 @@ static void main_window_load(Window *window) {
   text_layer_set_text(s_body_layer, "highest five");
   layer_add_child(window_layer, text_layer_get_layer(s_body_layer));
  
-  s_body_layer = text_layer_create(GRect(4, 55, width, 60));
-  text_layer_set_font(s_body_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
-  text_layer_set_background_color(s_body_layer, GColorClear);
-  text_layer_set_text(s_body_layer,acc_buffer);
-  layer_add_child(window_layer, text_layer_get_layer(s_body_layer));
+   s_acc_layer = text_layer_create(GRect(4, 70, width, 60));
+  text_layer_set_font(s_acc_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_text(s_acc_layer, "No data yet.");
+  text_layer_set_overflow_mode(s_acc_layer, GTextOverflowModeWordWrap);
+  layer_add_child(window_layer, text_layer_get_layer(s_acc_layer));
       
   
   s_body_layer = text_layer_create(GRect(4, 115, width, 60));
@@ -122,7 +136,7 @@ static void main_window_unload(Window *window) {
   text_layer_destroy(s_header_layer);
   text_layer_destroy(s_body_layer);
   text_layer_destroy(s_label_layer);
-
+  text_layer_destroy(s_acc_layer);
   action_bar_layer_destroy(s_action_bar);
 }
 
