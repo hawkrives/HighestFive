@@ -3,8 +3,6 @@
   "shortName": "HighestFive",
   "longName": "Highest Five",
   "companyName": "Highest Five",
-  "versionCode": 1,
-  "versionLabel": "1.0",
   "sdkVersion": "2",
   "targetPlatforms": ["aplite"],
   "watchapp": {
