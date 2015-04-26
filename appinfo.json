@@ -23,6 +23,7 @@
         "file": "action_icon_minus.png"
       },
       {
+        "menuIcon": true,
         "type": "png",
         "name": "APP_ICON",
         "file": "icon48_360.png"
