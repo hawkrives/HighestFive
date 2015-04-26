@@ -1,19 +1,27 @@
 {
   "uuid": "9e2151f8-395d-415e-95d8-ea5298bd2698",
-  "shortName": "accelerometer-test",
-  "longName": "accelerometer-test",
-  "companyName": "MakeAwesomeHappen",
+  "shortName": "HighestFive",
+  "longName": "Highest Five",
+  "companyName": Highest Five
   "versionCode": 1,
   "versionLabel": "1.0",
-  "sdkVersion": "3",
-  "targetPlatforms": ["aplite", "basalt"],
+  "sdkVersion": "2",
+  "targetPlatforms": ["aplite"],
   "watchapp": {
     "watchface": false
   },
-  "appKeys": {
-    "dummy": 0
-  },
   "resources": {
-    "media": []
+    "media": [
+      {
+        "type": "png",
+        "name": "IMAGE_ACTION_ICON_PLUS",
+        "file": "action_icon_plus.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_ACTION_ICON_MINUS",
+        "file": "action_icon_minus.png"
+      }
+    ]
   }
 }
